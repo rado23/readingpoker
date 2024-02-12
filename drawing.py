@@ -1,13 +1,13 @@
 
 
-import time, os, sys
-import Tkinter
-tk = Tkinter
+import time
+import tkinter
+tk = tkinter
 
 
-import exceptions
+import pyception
 
-class GraphicsError(exceptions.Exception):
+class GraphicsError(pyception.Exception):
     """Generic error class for graphics module exceptions."""
     
         
@@ -21,8 +21,7 @@ DEAD_THREAD = "Graphics thread quit unexpectedly"
 
 
 
-from copy import copy
-from Queue import Queue
+from queue import Queue
 import thread
 import atexit
 
@@ -61,7 +60,7 @@ def _tk_pump():
 def _tkCall(f, *args, **kw):
    
     if not _thread_running:
-        raise GraphicsError, DEAD_THREAD
+        raise GraphicsError(DEAD_THREAD)
     def func():
         return f(*args, **kw)
     _tk_request.put((func,True),True)
@@ -71,7 +70,7 @@ def _tkCall(f, *args, **kw):
 def _tkExec(f, *args, **kw):
    
     if not _thread_running:
-        raise GraphicsError, DEAD_THREAD
+        raise GraphicsError(DEAD_THREAD)
     def func():
         return f(*args, **kw)
     _tk_request.put((func,False),True)
@@ -124,7 +123,7 @@ class GraphWin(tk.Canvas):
 
     def __checkOpen(self):
         if self.closed:
-            raise GraphicsError, "window is closed"
+            raise GraphicsError("window is closed")
 
     def setBackground(self, color):
         """Set background color of the window"""
@@ -163,7 +162,7 @@ class GraphWin(tk.Canvas):
         while self.mouseX == None or self.mouseY == None:
             
             _tkCall(self.update)
-            if self.isClosed(): raise GraphicsError, "getMouse in closed window"
+            if self.isClosed(): raise GraphicsError("getMouse in closed window")
             time.sleep(.1) 
         x,y = self.toWorld(self.mouseX, self.mouseY)
         self.mouseX = None
@@ -174,7 +173,7 @@ class GraphWin(tk.Canvas):
         """Return last mouse click or None if mouse has
         not been clicked since last call"""
         if self.isClosed():
-            raise GraphicsError, "checkMouse in closed window"
+            raise GraphicsError("checkMouse in closed window")
         _tkCall(self.update)
         if self.mouseX != None and self.mouseY != None:
             x,y = self.toWorld(self.mouseX, self.mouseY)
@@ -232,7 +231,7 @@ class Transform:
         
         xs = (x-self.xbase) / self.xscale
         ys = (self.ybase-y) / self.yscale
-        return int(xs+0.5),int(ys+0.5)
+        return int(xs+0.5), int(ys+0.5)
         
     def world(self,xs,ys):
         
@@ -287,8 +286,8 @@ class GraphicsObject:
         window. Raises an error if attempt made to draw an object that
         is already visible."""
 
-        if self.canvas and not self.canvas.isClosed(): raise GraphicsError, OBJ_ALREADY_DRAWN
-        if graphwin.isClosed(): raise GraphicsError, "Can't draw to closed window"
+        if self.canvas and not self.canvas.isClosed(): raise GraphicsError(OBJ_ALREADY_DRAWN)
+        if graphwin.isClosed(): raise GraphicsError("Can't draw to closed window")
         self.canvas = graphwin
         
         self.id = _tkCall(self._draw, graphwin, self.config)
@@ -308,7 +307,7 @@ class GraphicsObject:
         if canvas and not canvas.isClosed():
             trans = canvas.trans
             if trans:
-                x = dx/ trans.xscale 
+                x = dx/ trans.xscale
                 y = -dy / trans.yscale
             else:
                 x = dx
@@ -322,7 +321,7 @@ class GraphicsObject:
     def _reconfig(self, option, setting):
         
         if not self.config.has_key(option):
-            raise GraphicsError, UNSUPPORTED_METHOD
+            raise GraphicsError(UNSUPPORTED_METHOD)
         options = self.config
         options[option] = setting
         if self.canvas and not self.canvas.isClosed():
@@ -458,7 +457,7 @@ class Line(_BBox):
         
     def setArrow(self, option):
         if not option in ["first","last","both","none"]:
-            raise GraphicsError, BAD_OPTION
+            raise GraphicsError(BAD_OPTION)
         self._reconfig("arrow", option)
         
 
@@ -499,21 +498,21 @@ class Text(GraphicsObject):
                 f,s,b = self.config['font']
                 self._reconfig("font",(face,s,b))
             else:
-                raise GraphicsError, BAD_OPTION
+                raise GraphicsError(BAD_OPTION)
 
         def setSize(self, size):
             if 5 <= size <= 36:
                 f,s,b = self.config['font']
                 self._reconfig("font", (f,size,b))
             else:
-                raise GraphicsError, BAD_OPTION
+                raise GraphicsError(BAD_OPTION)
 
         def setStyle(self, style):
             if style in ['bold','normal','italic', 'bold italic']:
                 f,s,b = self.config['font']
                 self._reconfig("font", (f,s,style))
             else:
-                raise GraphicsError, BAD_OPTION
+                raise GraphicsError(BAD_OPTION)
 
         def setTextColor(self, color):
             self.setFill(color)
