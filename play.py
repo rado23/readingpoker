@@ -1,20 +1,5 @@
 # play.py
 
-# main module which starts the game and instruction panel
-# The Reading Poker has been created by Yelena Matros, Andreas Savvides and Radoslaw Rozkowinski
-# This game has been developed using our knowledge from our Python lectures
-# and tutorials initially, and from Books and on-line guides
-# such as the one available at python.org
-# Some of the most helpful and significant books that we have used to help
-# us develop this game were:
-# Python Scripting for Computational Science - Hans Petter Langtangen
-# Core Python Programming - Wesley J. Chun
-# Python 2.1 Bible - Dave Brueck and Stephen Tanner
-# Python, how to program - Deitel
-# Python Programming for the Absolute Beginner - Michael Dawson
-# The instructions for how to use this game and play it are displayed below
-# as they will be as soon as the game is loaded.
-
 
 from drawing import *
 from bu_maker import BMaker
