@@ -8,121 +8,88 @@ from clrview import CShowDice
 class DrawMaker:
 
     def __init__(self):
-        self.win = GraphWin("Reading Poker Instruction", 800, 600) # starts instruction window
-        self.win.setBackground("yellow")
-        banner = Text(Point(400,30), "Welcome to the Reading Poker!")
+        self.create_instruction_window()
+        self.create_game_window()
+
+    def create_instruction_window(self):
+        instruction_win = GraphWin("Reading Poker Instruction", 800, 600)
+        instruction_win.setBackground("yellow")
+        self.create_banner(instruction_win)
+        self.create_instruction_messages(instruction_win)
+
+    def create_banner(self, win):
+        banner = Text(Point(400, 30), "Welcome to the Reading Poker!")
         banner.setSize(28)
         banner.setFill("blue")
         banner.setStyle("bold")
-        banner.draw(self.win)
-        self.msg = Text(Point(400,80), "Welcome to the game!")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,100), "You play Poker using 5 dice. You have 150 credits on the beginning.")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,120), "Each game costs you 15 credits. After first rolling dice you have")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,140), "two more chances to roll chosen dice again.")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,160), "Your goal is to earn as many credits as possible. You score as follow:")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,180), "A pair gives you 1 credit")
-        self.msg.setSize(14)
-        self.msg.setFill ("red")
-        self.msg.setStyle ("bold")
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,200), "Two pairs give you 5 credits")
-        self.msg.setSize(14)
-        self.msg.setFill ("red")
-        self.msg.setStyle ("bold")
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,220), "Three of a kind give you 8 credits")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg.setFill ("red")
-        self.msg.setStyle ("bold")
-        self.msg = Text(Point(400,240), "Full house give you 12 credits")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg.setFill ("red")
-        self.msg.setStyle ("bold")
-        self.msg = Text(Point(400,260), "Four of a kind give you 15 credits")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg.setFill ("red")
-        self.msg.setStyle ("bold")
-        self.msg = Text(Point(400,280), "Small straight give you 20 credits")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg.setFill ("red")
-        self.msg.setStyle ("bold")
-        self.msg = Text(Point(400,300), "Big straight give you 25 credits")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg.setFill ("red")
-        self.msg.setStyle ("bold")
-        self.msg = Text(Point(400,320), "Five of a kind (POKER) give you 30 credits")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg.setFill ("red")
-        self.msg.setStyle ("bold")
-        self.msg = Text(Point(400,340), "If you do not have any of above after three rollings,")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,360), "it costs you 20 credits. Your scores cumulate continuously.")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,380), "Game terminates when you have no credits to pay for next turns.")
-        self.msg.setSize(14)
-        self.msg.draw(self.win)
-        self.msg = Text(Point(400,500), "ENJOY THE GAME!")
-        self.msg.setSize(26)
-        self.msg.draw(self.win)
-        self.msg.setFill ("red3")
-        self.msg.setStyle ("bold")
-                     
-        self.win = GraphWin("Reading Poker", 600, 400) # starts the game window
-        self.win.setBackground("green3")
-        banner = Text(Point(300,30), "Reading Poker")
+        banner.draw(win)
+
+    def create_instruction_messages(self, win):
+        messages = [
+            "Welcome to the game!",
+            "You play Poker using 5 dice. You have 150 credits on the beginning.",
+            "Each game costs you 15 credits. After first rolling dice you have",
+            "two more chances to roll chosen dice again.",
+            "Your goal is to earn as many credits as possible. You score as follow:",
+            "A pair gives you 1 credit",
+            "Two pairs give you 5 credits",
+            "Three of a kind give you 8 credits",
+            "Full house give you 12 credits",
+            "Four of a kind give you 15 credits",
+            "Small straight give you 20 credits",
+            "Big straight give you 25 credits",
+            "Five of a kind (POKER) give you 30 credits",
+            "If you do not have any of above after three rollings,",
+            "it costs you 20 credits. Your scores cumulate continuously.",
+            "Game terminates when you have no credits to pay for next turns.",
+            "ENJOY THE GAME!"
+        ]
+        self.create_text_messages(win, messages)
+
+    def create_text_messages(self, win, messages):
+        y_position = 100
+        for message in messages:
+            text = Text(Point(400, y_position), message)
+            text.setSize(14)
+            if "credits" in message:
+                text.setFill("red")
+                text.setStyle("bold")
+            text.draw(win)
+            y_position += 20
+
+    def create_game_window(self):
+        game_win = GraphWin("Reading Poker", 600, 400)
+        game_win.setBackground("green3")
+        self.create_game_banner(game_win)
+        self.create_game_elements(game_win)
+
+    def create_game_banner(self, win):
+        banner = Text(Point(300, 30), "Reading Poker")
         banner.setSize(24)
         banner.setFill("yellow2")
         banner.setStyle("bold")
-        banner.draw(self.win)
-        self.msg = Text(Point(300,380), "Welcome to the game!")
-        self.msg.setSize(18)
-        self.msg.draw(self.win)
-        self.createDice(Point(300,100), 75)
-        self.buttons = []
-        self.addDiceButtons(Point(300,170), 75, 30)
-        b = BMaker(self.win, Point(300, 230), 400, 40, "Roll Dice")
-        self.buttons.append(b)
-        b = BMaker(self.win, Point(300, 280), 150, 40, "Score")
-        self.buttons.append(b)
-        b = BMaker(self.win, Point(570,375), 40, 30, "Quit")
-        self.buttons.append(b)
-        self.money = Text(Point(300,325), "credits: 150")
-        self.money.setSize(18)
-        self.money.draw(self.win)
-        
-    def createDice(self, center, size): # places dice in the game window
-        center.move(-3*size,0)
-        self.dice = []
-        for i in range(5):
-            view = CShowDice(self.win, center, size)
-            self.dice.append(view)
-            center.move(1.5*size,0)
+        banner.draw(win)
 
-    def addDiceButtons(self, center, width, height): # places buttons which should be pushed to chose die to be rolled
-        center.move(-3*width, 0)
-        for i in range(1,6):
-            label = "Die %d" % (i)
-            b = BMaker(self.win, center, width, height, label)
-            self.buttons.append(b)
-            center.move(1.5*width, 0)
+    def create_game_elements(self, win):
+        self.create_dice(win, Point(300, 100), 75)
+        self.create_dice_buttons(win, Point(300, 170), 75, 30)
+        self.create_buttons(win)
+
+    def create_dice(self, win, center, size):
+        center.move(-3 * size, 0)
+        dice = [CShowDice(win, center, size) for _ in range(5)]
+
+    def create_dice_buttons(self, win, center, width, height):
+        center.move(-3 * width, 0)
+        labels = ["Die 1", "Die 2", "Die 3", "Die 4", "Die 5"]
+        buttons = [BMaker(win, center, width, height, label) for label in labels]
+
+    def create_buttons(self, win):
+        buttons = [
+            BMaker(win, Point(300, 230), 400, 40, "Roll Dice"),
+            BMaker(win, Point(300, 280), 150, 40, "Score"),
+            BMaker(win, Point(570, 375), 40, 30, "Quit")
+        ]
 
     def choose(self, choices): # makes particular buttons 'active' or 'inactive'
         buttons = self.buttons
@@ -158,27 +125,6 @@ class DrawMaker:
         else:
             text = "You rolled %s" % (msg)
         self.msg.setText(text)
-
-    def chooseDice(self): # selects which dice to roll
-        choices = []
-        while 1:
-            b = self.choose(["Die 1", "Die 2", "Die 3", "Die 4", "Die 5",
-                             "Roll Dice", "Score"])
-            if b[0] == "D":
-                i = eval(b[4]) - 1
-                if i in choices:
-                    choices.remove(i)
-                    self.dice[i].setColor("black")
-                else:
-                    choices.append(i)
-                    self.dice[i].setColor("gray")
-            else:
-                for d in self.dice:
-                    d.setColor("black")
-                if b == "Score":
-                    return []
-                elif choices != []:
-                    return choices
     
 
 from readingp import ReadingPoker
